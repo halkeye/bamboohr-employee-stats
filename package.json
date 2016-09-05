@@ -1,0 +1,36 @@
+{
+  "name": "bamboohr-employee-stats",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Get some stats out of bamboo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halkeye/bamboohr-employee-stats.git"
+  },
+  "author": "Gavin Mogan <npm@gavinmogan.com> (https://www.gavinmogan.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/halkeye/bamboohr-employee-stats/issues"
+  },
+  "homepage": "https://github.com/halkeye/bamboohr-employee-stats#readme",
+  "dependencies": {
+    "confluence-api": "^1.1.0",
+    "es6-promisify-all": "^0.1.0",
+    "geocoder": "^0.2.2",
+    "lodash": "^4.15.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1",
+    "xml-parser": "^1.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-semistandard": "^7.0.0",
+    "eslint-config-standard": "^6.0.0",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-standard": "^2.0.0"
+  }
+}
