@@ -3,7 +3,7 @@ const parse = require('xml-parser');
 const promisify = require('es6-promisify-all');
 const Confluence = require('confluence-api');
 const fs = promisify(require('fs'));
-const { once } = require('lodash');
+const { memoize } = require('lodash');
 
 Confluence.prototype = promisify(Confluence.prototype);
 
@@ -20,8 +20,8 @@ const fields = {
   'location': 'Location'
 };
 
-const _locations = fs.existsSync('locations') ? require('./locations.json') : {};
-const getLocation = once((location) => {
+const _locations = fs.existsSync('locations.json') ? require('./locations.json') : {};
+const getLocation = memoize((location) => {
   if (_locations[location]) { return Promise.resolve(_locations[location]); }
 
   return request({url: 'https://maps.googleapis.com/maps/api/geocode/json', json: true, qs: { address: location, key: process.env.GMAPS_API_KEY }})
@@ -82,7 +82,7 @@ const makeContentForField = (field, summarizedValues) => {
   const promises = Object.keys(summarizedValues).sort((a,b) => summarizedValues[b]-summarizedValues[a]).map(valueName => {
     const ret = [valueName, summarizedValues[valueName]];
     if (field === 'location') {
-      return getLocation(summarizedValues[valueName])
+      return getLocation(valueName)
         .then(location => {
           return ret.concat([location.lat, location.lng]);
         });
@@ -90,14 +90,19 @@ const makeContentForField = (field, summarizedValues) => {
       return Promise.resolve(ret);
     }
   });
+  const headers = '<tr>' + [fields[field], 'Count'].concat(field === 'location' ? ['Latitude', 'Longitude'] : [])
+    .map(header => {
+        return `<th>${header}</th>`;
+    }).join('') + '</tr>';
+
   return Promise.all(promises)
     .then(rows => {
       return rows.map(row => {
         const [header, value, ...extras] = row;
-        return `<tr><th>${header}</th><td>${value}</td>${extras.map(extra => `<td>${extra}</td>`).join('')}</tr>`;
+        return `<tr><td>${header}</td><td>${value}</td>${extras.map(extra => `<td>${extra}</td>`).join('')}</tr>`;
       }).join('');
     })
-    .then(content => `<table><tbody>${content}</tbody></table>`);
+    .then(content => `<table><tbody>${headers}${content}</tbody></table>`);
 };
 
 getOrCreatePage('BambooHR Employee Stats', 0).then(page => {
