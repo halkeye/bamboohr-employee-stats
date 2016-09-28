@@ -5,11 +5,12 @@ const fs = promisify(require('fs'));
 async function main() {
   const page = await funcs.getOrCreatePage('BambooHR Employee Stats', 0);
   const data = await funcs.getEmployeeData().then(funcs.summarizeEmployeeData);
-  await fs.writeFileAsync('data.json', JSON.stringify(data));
 
   await Promise.all(Object.keys(funcs.fields).map(field => {
-    return funcs.makeContentForField(field, data[field]).then(content => {
-      return funcs.setConfluenceContent(funcs.fields[field], page.id, content);
+    return fs.writeFileAsync(`public/${field}.json`, JSON.stringify(data[field])).then(() => {
+      return funcs.makeContentForField(field, data[field]).then(content => {
+        return funcs.setConfluenceContent(funcs.fields[field], page.id, content);
+      });
     });
   }));
 }
