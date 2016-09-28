@@ -17,37 +17,22 @@ fetch('location.json')
       minZoom: 1
     }).addTo(map);
 
-    var circles = location.filter(function(location) { return !!location[0]; }).map(function(location) {
-      var div = document.createElement('li');
-      div.appendChild(document.createTextNode(location[0] + ': ' + location[1]));
-      saucers.appendChild(div);
-      return L.circle([location[2], location[3]], location[1]*7000, {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5
-      }).addTo(map).bindPopup(location[0] + '\nSaucers: ' + location[1]);
-    });
+    var markers = L.markerClusterGroup({ chunkedLoading: true });
+    location
+      .filter(function(location) { return !!location[0]; })
+      .forEach(function(location) {
+        var title = location[0] + ': ' + location[1];
+        var marker = L.marker(L.latLng(location[2], location[3]), { title: title });
+        marker.bindPopup(title);
+        markers.addLayer(marker);
 
-    var myZoom = {
-      start:  map.getZoom(),
-      end: map.getZoom()
-    };
-
-    map.on('zoomstart', function(e) {
-      myZoom.start = map.getZoom();
-    });
-
-    map.on('zoomend', function(e) {
-      myZoom.end = map.getZoom();
-      circles.forEach(function(circle) {
-        var diff = myZoom.start - myZoom.end;
-        if (diff > 0) {
-          circle.setRadius(circle.getRadius() * 2);
-        } else if (diff < 0) {
-          circle.setRadius(circle.getRadius() / 2);
-        }
+        var div = document.createElement('li');
+        div.appendChild(document.createTextNode(title));
+        saucers.appendChild(div);
       });
-    });
+
+    map.addLayer(markers);
+
   });
 
 

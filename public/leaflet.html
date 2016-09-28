@@ -3,19 +3,23 @@
   <head>
     <title>Saucers</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.0-rc.1.0/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.0-rc.1.0/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/whatwg-fetch@1.0.0/fetch.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.0.0-rc.1.0/dist/leaflet.markercluster-src.js"></script>
 
     <style>
       #map{ width: 900px; height: 500px; }
-      #legend { position: absolute; right: 0; top: 0 };
+      #legend { position: absolute; right: 0; top: 0; }
+      #saucers { list-style: none; padding: 0; text-align: right; padding-right: 2em; }
     </style>
   </head>
   <body>
 
     <div id="map"></div>
     <div id="legend">
-      <h3>Saucers</h3>
+      <h2>Saucers</h2>
       <ul id="saucers">
       </ul>
     </div>
