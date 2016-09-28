@@ -3,7 +3,6 @@ const funcs = require('./lib/functions.js');
 const fs = promisify(require('fs'));
 
 async function main() {
-  const page = await funcs.getOrCreatePage('BambooHR Employee Stats', 0);
   const data = await funcs.getEmployeeData().then(funcs.summarizeEmployeeData);
 
   await Promise.all(Object.keys(funcs.fields).map(async field => {
