@@ -25,7 +25,9 @@ module.exports.fields = fields;
 
 const _locations = fs.existsSync('locations.json') ? require('./locations.json') : {};
 module.exports.getLocation = memoize((location) => {
-  if (_locations[location]) { return Promise.resolve(_locations[location]); }
+  if (_locations[location] || !location) {
+    return Promise.resolve(_locations[location] || []);
+  }
 
   return request({url: 'https://maps.googleapis.com/maps/api/geocode/json', json: true, qs: { address: location, key: process.env.GMAPS_API_KEY }})
     .then(json => {
@@ -56,15 +58,42 @@ module.exports.getEmployeeData = () => {
 };
 
 module.exports.summarizeEmployeeData = (employees) => {
-  return employees.reduce((prev, employee) => {
-    Object.keys(fields).forEach(field => {
-      if (!prev[field][employee[field]]) {
-        prev[field][employee[field]] = 0;
-      }
-      prev[field][employee[field]]++;
-    });
-    return prev;
-  }, { gender: {}, jobTitle: {}, department: {}, location: {} })
+  return Promise.resolve().then(() => {
+    return employees.reduce((prev, employee) => {
+      Object.keys(fields).forEach(field => {
+        if (!prev[field][employee[field]]) {
+          prev[field][employee[field]] = 0;
+        }
+        prev[field][employee[field]]++;
+      });
+      return prev;
+    }, { gender: {}, jobTitle: {}, department: {}, location: {} })
+  }).then(summarizedValues => {
+    const promises = Promise.all(Object.keys(summarizedValues).map(field => {
+      return Promise.all(Object.keys(summarizedValues[field]).sort((a,b) => summarizedValues[field][b]-summarizedValues[field][a]).map(valueName => {
+        const ret = [field, valueName, summarizedValues[field][valueName]];
+        if (field === 'location') {
+          return module.exports.getLocation(valueName)
+            .then(location => {
+              return ret.concat([location.lat, location.lng]);
+            });
+        } else {
+          return Promise.resolve(ret);
+        }
+      }));
+    }));
+    return promises.then(all => {
+      const ret = {};
+      all.forEach(field => {
+        field.forEach(elm => {
+          const key = elm.shift();
+          if (!ret[key]) { ret[key] = []; }
+          ret[key].push(elm);
+        });
+      });
+      return ret;
+    })
+  });
 };
 
 module.exports.getOrCreatePage = (title, parent) => {
@@ -88,23 +117,12 @@ module.exports.setConfluenceContent = (title, parent, content) => {
 };
 
 module.exports.makeContentForField = (field, summarizedValues) => {
-  const promises = Object.keys(summarizedValues).sort((a,b) => summarizedValues[b]-summarizedValues[a]).map(valueName => {
-    const ret = [valueName, summarizedValues[valueName]];
-    if (field === 'location') {
-      return module.exports.getLocation(valueName)
-        .then(location => {
-          return ret.concat([location.lat, location.lng]);
-        });
-    } else {
-      return Promise.resolve(ret);
-    }
-  });
   const headers = '<tr>' + [fields[field], 'Count'].concat(field === 'location' ? ['Latitude', 'Longitude'] : [])
     .map(header => {
         return `<th>${header}</th>`;
     }).join('') + '</tr>';
 
-  return Promise.all(promises)
+  return Promise.resolve(summarizedValues)
     .then(rows => {
       return rows.map(row => {
         const [header, value, ...extras] = row;
