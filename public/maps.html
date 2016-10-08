@@ -33,7 +33,7 @@
     <script>
 
       function initMap() {
-        fetch('location.json')
+        fetch('location.json', { credentials: 'same-origin' })
           .then(function(response) { return response.json(); })
           .then(function(location) {
             var legend = document.getElementById('legend');

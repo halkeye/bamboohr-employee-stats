@@ -1,7 +1,7 @@
 /* eslint no-var: 0 */
 /* eslint-env: browser */
 /* global fetch, L */
-fetch('location.json')
+fetch('location.json', { credentials: 'same-origin' })
   .then(function(response) { return response.json(); })
   .then(function(location) {
     // initialize the map
