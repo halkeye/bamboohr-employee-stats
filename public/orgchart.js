@@ -78,9 +78,11 @@ d3.json("orgchart.json", function(error, data) {
     .attr("r", picsize/2)
     .style("fill", function(d,i){ return 'url(#pic_' + d.data.id+')'; });
 
-  node.append("text")
-    .attr("dy", 3)
-    .attr("x", function(d) { return d.children ? -35 : 35; })
-    .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-    .text(function(d) { return d.data.displayName; });
+  ['displayName', 'jobTitle','department'].forEach(function(elm, idx) {
+    node.append("text")
+      .attr("dy", idx*8)
+      .attr("x", function(d) { return d.children ? -35 : 35; })
+      .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+      .text(function(d) { return d.data[elm]; });
+  })
 });
