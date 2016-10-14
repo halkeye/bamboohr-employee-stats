@@ -11,6 +11,8 @@ function makeStartDate(date) {
   };
 }
 
+var colorHash = new window.ColorHash();
+
 fetch('employees.json', { credentials: 'same-origin' })
   .then(function(response) { return response.json(); })
   .then(function(employees) {
@@ -18,8 +20,10 @@ fetch('employees.json', { credentials: 'same-origin' })
       events: employees.map(function(emp) {
         return {
           start_date: makeStartDate(emp.hireDate),
+          background: { color: colorHash.hex(emp.department) },
+          classname: emp.department.toLowerCase().replace(/\W+/g, '_'),
           text: {
-            headline: emp.displayName
+            headline: '<p><b>' + emp.displayName + '</b></p><p>' + emp.department + '</p>'
           }
         };
       })
@@ -27,6 +31,7 @@ fetch('employees.json', { credentials: 'same-origin' })
     console.log(data);
 
     var additionalOptions = {
+      initial_zoom: 8,
       start_at_end: true,
       timenav_height: 400
     };
