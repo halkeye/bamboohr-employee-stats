@@ -22,6 +22,10 @@ fetch('employees.json', { credentials: 'same-origin' })
           start_date: makeStartDate(emp.hireDate),
           background: { color: colorHash.hex(emp.department) },
           classname: emp.department.toLowerCase().replace(/\W+/g, '_'),
+          media: {
+            url: emp.photoUrl,
+            thumbnail: emp.photoUrl
+          },
           text: {
             headline: '<p><b>' + emp.displayName + '</b></p><p>' + emp.department + '</p>'
           }
