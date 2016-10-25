@@ -13,18 +13,24 @@ fetch('location.json', { credentials: 'same-origin' })
       attribution: 'Tiles by <a href="https://mapc.org">MAPC</a>, Data by <a href="https://mass.gov/mgis">MassGIS</a>',
       accessToken: 'pk.eyJ1IjoiaGFsa2V5ZSIsImEiOiJjaXRtamdscXYwMW9lMnhwYzBoM2Z3M2FkIn0.x71hu_4PU9_nDRYiiJ2YGg',
       id: 'mapbox.streets',
-      maxZoom: 18,
+      maxZoom: 10,
       minZoom: 1
     }).addTo(map);
 
-    var markers = L.markerClusterGroup({ chunkedLoading: true });
+    var markers = L.markerClusterGroup({ 
+      chunkedLoading: true, 
+      spiderfyOnMaxZoom: false,
+      singleMarkerMode: true
+    });
     location
       .filter(function(location) { return !!location[0]; })
       .forEach(function(location) {
         var title = location[0] + ': ' + location[1];
-        var marker = L.marker(L.latLng(location[2], location[3]), { title: title });
-        marker.bindPopup(title);
-        markers.addLayer(marker);
+        for (let i of Array(parseInt(location[1], 10)).keys()) {
+          var marker = L.marker(L.latLng(location[2], location[3]), { title: title });
+          marker.bindPopup(title);
+          markers.addLayer(marker);
+        }
 
         var div = document.createElement('li');
         div.appendChild(document.createTextNode(title));
