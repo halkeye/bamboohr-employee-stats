@@ -14,7 +14,7 @@ var paths = {
 };
 
 function onD3() {
-  d3.json("gender.json", function(error, genders) {
+  d3.json('gender.json', function(error, genders) {
     if (error) throw error;
     genders = genders.map(function(gender) {
       return {
@@ -31,19 +31,19 @@ function onD3() {
 
     var bodyWidth = 276.01;
 
-    var node = d3.select("svg")
-      .selectAll(".node")
+    var node = d3.select('svg')
+      .selectAll('.node')
       .data(genders)
       .enter()
         .append('g')
-        .attr("transform", function(d, idx) { return "translate(" + (idx*bodyWidth) + "," + 0 + ")"; })
+        .attr('transform', function(d, idx) { return 'translate(' + (idx*bodyWidth) + ',' + 0 + ')'; })
 
     node
-      .append("text")
-      .attr("text-anchor", "middle")
-      .attr("stroke-width", 1)
-      .attr("x", bodyWidth / 2)
-      .attr("y", 600)
+      .append('text')
+      .attr('text-anchor', 'middle')
+      .attr('stroke-width', 1)
+      .attr('x', bodyWidth / 2)
+      .attr('y', 600)
       .transition()
       .duration(duration)
       .ease(ease)
@@ -55,10 +55,10 @@ function onD3() {
       });
 
     var body = node
-      .append("g")
-      .attr("stroke-width", 2)
-      .attr("stroke", "black")
-      .style("fill", function(d) { return 'url(#' + d.label + '_Gradient)'; })
+      .append('g')
+      .attr('stroke-width', 2)
+      .attr('stroke', 'black')
+      .style('fill', function(d) { return 'url(#' + d.label + '_Gradient)'; })
 
     var gradient = body
       .append('defs')
@@ -84,14 +84,14 @@ function onD3() {
       .attr('offset', '0%')
 
     body
-      .append("circle")
-      .attr("class", "head")
-      .attr("cx", 130.95011)
-      .attr("cy", 47.58577)
-      .attr("r", 46.54521)
+      .append('circle')
+      .attr('class', 'head')
+      .attr('cx', 130.95011)
+      .attr('cy', 47.58577)
+      .attr('r', 46.54521)
 
     body
-      .append("path")
-      .attr("d", function(d) { return paths[d.label] || paths.unknown; })
+      .append('path')
+      .attr('d', function(d) { return paths[d.label] || paths.unknown; })
   });
 }
