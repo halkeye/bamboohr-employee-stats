@@ -5,8 +5,7 @@
 
 onD3();
 
-
-var duration = 1000;
+var duration = 1700;
 var ease = d3.easeElastic;
 
 var paths = {
