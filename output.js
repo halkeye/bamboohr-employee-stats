@@ -46,4 +46,7 @@ async function main() {
   }));
 }
 
-main().catch(body => console.log('failure', body));
+main().catch(body => {
+  console.log('failure', body);
+  throw body;
+});
