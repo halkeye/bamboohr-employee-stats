@@ -27,7 +27,7 @@ fetch('location.json', { credentials: 'same-origin' })
       .forEach(function(location) {
         var title = location[0] + ': ' + location[1];
         for (let i of Array(parseInt(location[1], 10)).keys()) {
-          var marker = L.marker(L.latLng(location[2], location[3]), { title: title });
+          var marker = L.marker(L.latLng(location[2], location[3]), { title: title, instance: i });
           marker.bindPopup(title);
           markers.addLayer(marker);
         }
