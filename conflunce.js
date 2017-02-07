@@ -1,4 +1,3 @@
-const promisify = require('es6-promisify-all');
 const funcs = require('./lib/functions.js');
 
 async function main() {
