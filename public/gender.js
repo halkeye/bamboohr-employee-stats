@@ -24,7 +24,7 @@ function onD3() {
     }).sort(function(a, b) {
       return a.label.localeCompare(b.label);
     });
-    var total = d3.sum(genders, function(d) { return d.value });
+    var total = d3.sum(genders, function(d) { return d.value; });
     genders.forEach(function(gender) {
       gender.percentage = Math.round((gender.value/total)*100);
     });
@@ -36,7 +36,7 @@ function onD3() {
       .data(genders)
       .enter()
         .append('g')
-        .attr('transform', function(d, idx) { return 'translate(' + (idx*bodyWidth) + ',' + 0 + ')'; })
+        .attr('transform', function(d, idx) { return 'translate(' + (idx*bodyWidth) + ',' + 0 + ')'; });
 
     node
       .append('text')
@@ -51,14 +51,14 @@ function onD3() {
         var i = d3.interpolate(0, d.percentage);
         return function(t) {
           d3.select(this).text(d.label + ' -- ' + Math.round(i(t)) + '%');
-        }.bind(this)
+        }.bind(this);
       });
 
     var body = node
       .append('g')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
-      .style('fill', function(d) { return 'url(#' + d.label + '_Gradient)'; })
+      .style('fill', function(d) { return 'url(#' + d.label + '_Gradient)'; });
 
     var gradient = body
       .append('defs')
@@ -68,7 +68,7 @@ function onD3() {
         .attr('y1', '100%')
         .attr('x1', '0%')
         .attr('id', function(d) { return d.label + '_Gradient'; })
-        .attr('gradientUnits', 'userSpaceOnUse')
+        .attr('gradientUnits', 'userSpaceOnUse');
 
     gradient.append('stop')
       .attr('stop-color', '#00FF00')
@@ -81,17 +81,17 @@ function onD3() {
 
     gradient.append('stop')
       .attr('stop-color', '#000000')
-      .attr('offset', '0%')
+      .attr('offset', '0%');
 
     body
       .append('circle')
       .attr('class', 'head')
       .attr('cx', 130.95011)
       .attr('cy', 47.58577)
-      .attr('r', 46.54521)
+      .attr('r', 46.54521);
 
     body
       .append('path')
-      .attr('d', function(d) { return paths[d.label] || paths.unknown; })
+      .attr('d', function(d) { return paths[d.label] || paths.unknown; });
   });
 }
