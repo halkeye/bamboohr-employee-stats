@@ -28,11 +28,11 @@ d3.json("orgchart.json", function(error, data) {
     var svg = d3.select("body").append("svg")
       .attr("width", width)
       .attr("height", height);
-    var g = svg.append("g")
+    var g = svg.append("g");
 
     var tree = d3.tree()
       /* height, width */
-      .nodeSize([picsize+10, picsize*6])
+      .nodeSize([picsize+10, picsize*6]);
 
     tree(root);
 
@@ -56,13 +56,13 @@ d3.json("orgchart.json", function(error, data) {
         update(d3.hierarchy(d.data));
       })
       .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
     // add picture
     node
       .append('defs')
       .append('pattern')
-      .attr('id', function(d,i){ return 'pic_' + d.data.id })
+      .attr('id', function(d,i){ return 'pic_' + d.data.id; })
       .attr('height','100%')
       .attr('width','100%')
       .attr('x',0)

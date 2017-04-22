@@ -49,7 +49,7 @@ d3.json("employees.json", function(error, employees) {
   node.append("text")
     .attr("dy", ".3em")
     .style("text-anchor", "middle")
-    .text(function(d) { return d.department.substring(0, d.r / 3); })
+    .text(function(d) { return d.department.substring(0, d.r / 3); });
 });
 
 // d3.select(self.frameElement).style("height", diameter + "px");
