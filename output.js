@@ -4,23 +4,23 @@ const fs = promisify(require('fs'));
 const { each, omit, groupBy, keyBy } = require('lodash');
 const errors = require('request-promise/errors');
 
-function sleep(ms = 0) { return new Promise(resolve => setTimeout(resolve, ms)); }
+function sleep (ms = 0) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-function makeOrgData(employees) {
+function makeOrgData (employees) {
   const topEmployee = employees.find(emp => !emp.supervisor) ||
     employees.find(emp => emp.jobTitle === 'CEO');
   topEmployee.supervisorEId = '';
 
   const groupedBySupervisor = groupBy(employees, 'supervisorEId');
   const employeesById = keyBy(employees, 'id');
-  each(omit(groupedBySupervisor, ''), function(children, parentId) {
-    if (!employeesById[parentId]) { employeesById[parentId] = { "id": parentId, "displayName": "Missing" }; }
+  each(omit(groupedBySupervisor, ''), function (children, parentId) {
+    if (!employeesById[parentId]) { employeesById[parentId] = { 'id': parentId, 'displayName': 'Missing' }; }
     employeesById[parentId].children = children;
   });
   return groupedBySupervisor[''];
 }
 
-async function getSingleEmployeeData(employee) {
+async function getSingleEmployeeData (employee) {
   try {
     const newData = await funcs.getEmployeeData(employee.id);
     return Object.assign(employee, newData);
@@ -33,7 +33,7 @@ async function getSingleEmployeeData(employee) {
     }
   }
 }
-async function main() {
+async function main () {
   const employees = await funcs.getEmployeesData()
     .then(employees => Promise.all(employees.map(getSingleEmployeeData)));
   fs.writeFileSync(`public/employees.json`, JSON.stringify(employees, null, '  '));

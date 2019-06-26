@@ -13,20 +13,20 @@ var paths = {
   'Male': 'm79.945605,106.02037c-35.78976,0 -58.71876,30.98756 -58.71876,61.58276l0,143.21573c-0.3294,27.98432 39.966,27.98432 40.10064,0l0,-131.75848l10.02512,0l0,363.76815c-0.62156,37.98085 53.04736,36.89241 52.99008,0l0,-211.95947l8.593,0l0,211.95947c0.70176,36.89241 54.65136,37.98085 54.4222,0l0,-363.76815l10.02516,0l0,131.75848c-0.4726,28.19916 39.61368,28.19916 40.10056,0l0,-143.21573c-0.5728,-30.5952 -24.36108,-61.03424 -60.15084,-61.58276l-97.38716,0z'
 };
 
-function onD3() {
-  d3.json('gender.json', function(error, genders) {
+function onD3 () {
+  d3.json('gender.json', function (error, genders) {
     if (error) throw error;
-    genders = genders.map(function(gender) {
+    genders = genders.map(function (gender) {
       return {
         label: gender[0],
         value: gender[1]
       };
-    }).sort(function(a, b) {
+    }).sort(function (a, b) {
       return a.label.localeCompare(b.label);
     });
-    var total = d3.sum(genders, function(d) { return d.value; });
-    genders.forEach(function(gender) {
-      gender.percentage = Math.round((gender.value/total)*100);
+    var total = d3.sum(genders, function (d) { return d.value; });
+    genders.forEach(function (gender) {
+      gender.percentage = Math.round((gender.value / total) * 100);
     });
 
     var bodyWidth = 276.01;
@@ -35,8 +35,8 @@ function onD3() {
       .selectAll('.node')
       .data(genders)
       .enter()
-        .append('g')
-        .attr('transform', function(d, idx) { return 'translate(' + (idx*bodyWidth) + ',' + 0 + ')'; });
+      .append('g')
+      .attr('transform', function (d, idx) { return 'translate(' + (idx * bodyWidth) + ',' + 0 + ')'; });
 
     node
       .append('text')
@@ -47,9 +47,9 @@ function onD3() {
       .transition()
       .duration(duration)
       .ease(ease)
-      .tween('text', function(d) {
+      .tween('text', function (d) {
         var i = d3.interpolate(0, d.percentage);
-        return function(t) {
+        return function (t) {
           d3.select(this).text(d.label + ' -- ' + Math.round(i(t)) + '%');
         }.bind(this);
       });
@@ -58,24 +58,24 @@ function onD3() {
       .append('g')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
-      .style('fill', function(d) { return 'url(#' + d.label + '_Gradient)'; });
+      .style('fill', function (d) { return 'url(#' + d.label + '_Gradient)'; });
 
     var gradient = body
       .append('defs')
-        .append('linearGradient')
-        .attr('y2', '0%')
-        .attr('x2', '0%')
-        .attr('y1', '100%')
-        .attr('x1', '0%')
-        .attr('id', function(d) { return d.label + '_Gradient'; })
-        .attr('gradientUnits', 'userSpaceOnUse');
+      .append('linearGradient')
+      .attr('y2', '0%')
+      .attr('x2', '0%')
+      .attr('y1', '100%')
+      .attr('x1', '0%')
+      .attr('id', function (d) { return d.label + '_Gradient'; })
+      .attr('gradientUnits', 'userSpaceOnUse');
 
     gradient.append('stop')
       .attr('stop-color', '#00FF00')
       .transition()
       .duration(duration)
       .ease(ease)
-      .attrTween('offset', function(d) {
+      .attrTween('offset', function (d) {
         return d3.interpolate('0%', d.percentage + '%');
       });
 
@@ -92,6 +92,6 @@ function onD3() {
 
     body
       .append('path')
-      .attr('d', function(d) { return paths[d.label] || paths.unknown; });
+      .attr('d', function (d) { return paths[d.label] || paths.unknown; });
   });
 }

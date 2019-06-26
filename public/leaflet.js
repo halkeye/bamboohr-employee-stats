@@ -2,10 +2,10 @@
 /* eslint-env: browser */
 /* global fetch, L */
 fetch('location.json', { credentials: 'same-origin' })
-  .then(function(response) { return response.json(); })
-  .then(function(location) {
+  .then(function (response) { return response.json(); })
+  .then(function (location) {
     // initialize the map
-    var map = L.map('map').setView([0,0], 2);
+    var map = L.map('map').setView([0, 0], 2);
     var saucers = document.getElementById('saucers');
 
     // load a tile layer
@@ -17,14 +17,14 @@ fetch('location.json', { credentials: 'same-origin' })
       minZoom: 1
     }).addTo(map);
 
-    var markers = L.markerClusterGroup({ 
-      chunkedLoading: true, 
+    var markers = L.markerClusterGroup({
+      chunkedLoading: true,
       spiderfyOnMaxZoom: false,
       singleMarkerMode: true
     });
     location
-      .filter(function(location) { return !!location[0]; })
-      .forEach(function(location) {
+      .filter(function (location) { return !!location[0]; })
+      .forEach(function (location) {
         var title = location[0] + ': ' + location[1];
         for (let i of Array(parseInt(location[1], 10)).keys()) {
           var marker = L.marker(L.latLng(location[2], location[3]), { title: title, instance: i });
@@ -38,7 +38,4 @@ fetch('location.json', { credentials: 'same-origin' })
       });
 
     map.addLayer(markers);
-
   });
-
-

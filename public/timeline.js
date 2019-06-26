@@ -2,7 +2,7 @@
 /* eslint-env: browser */
 /* global fetch, TL */
 'use strict';
-function makeStartDate(date) {
+function makeStartDate (date) {
   var parts = date.split('-');
   return {
     year: parts[0],
@@ -14,10 +14,10 @@ function makeStartDate(date) {
 var colorHash = new window.ColorHash();
 
 fetch('employees.json', { credentials: 'same-origin' })
-  .then(function(response) { return response.json(); })
-  .then(function(employees) {
+  .then(function (response) { return response.json(); })
+  .then(function (employees) {
     var data = {
-      events: employees.map(function(emp) {
+      events: employees.map(function (emp) {
         return {
           start_date: makeStartDate(emp.hireDate),
           background: { color: colorHash.hex(emp.department) },
@@ -40,5 +40,5 @@ fetch('employees.json', { credentials: 'same-origin' })
       timenav_height: 400
     };
 
-    new TL.Timeline('timeline-embed', data, additionalOptions);
+    return new TL.Timeline('timeline-embed', data, additionalOptions);
   });

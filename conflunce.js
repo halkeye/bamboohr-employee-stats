@@ -1,6 +1,6 @@
 const funcs = require('./lib/functions.js');
 
-async function main() {
+async function main () {
   const page = await funcs.getOrCreatePage('BambooHR Employee Stats', 0);
   const data = await funcs.getEmployeeData().then(funcs.summarizeEmployeeData);
 
