@@ -25,7 +25,7 @@ d3.json('employees.json', function (error, employees) {
   }, {});
 
   var root = {
-    'children': Object.keys(departments).map(function (dept) {
+    children: Object.keys(departments).map(function (dept) {
       return {
         department: dept,
         value: departments[dept]
