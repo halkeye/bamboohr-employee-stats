@@ -14,7 +14,7 @@ function makeOrgData (employees) {
   const groupedBySupervisor = groupBy(employees, 'supervisorEId');
   const employeesById = keyBy(employees, 'id');
   each(omit(groupedBySupervisor, ''), function (children, parentId) {
-    if (!employeesById[parentId]) { employeesById[parentId] = { 'id': parentId, 'displayName': 'Missing' }; }
+    if (!employeesById[parentId]) { employeesById[parentId] = { id: parentId, displayName: 'Missing' }; }
     employeesById[parentId].children = children;
   });
   return groupedBySupervisor[''];
