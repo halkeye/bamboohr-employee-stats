@@ -36,8 +36,8 @@ async function getSingleEmployeeData (employee) {
 async function main () {
   const employees = await funcs.getEmployeesData()
     .then(employees => Promise.all(employees.map(getSingleEmployeeData)));
-  fs.writeFileSync(`public/employees.json`, JSON.stringify(employees, null, '  '));
-  fs.writeFileSync(`public/orgchart.json`, JSON.stringify(makeOrgData(employees), null, '  '));
+  fs.writeFileSync('public/employees.json', JSON.stringify(employees, null, '  '));
+  fs.writeFileSync('public/orgchart.json', JSON.stringify(makeOrgData(employees), null, '  '));
 
   const data = await funcs.summarizeEmployeeData(employees);
 
